@@ -51,13 +51,7 @@ export const getPublicPage = createServerFn({ method: "GET" }).handler(async () 
   };
 });
 
-const orderSchema = z.object({
-  offerId: z.string().uuid(),
-  name: z.string().trim().min(3).max(100),
-  email: z.string().trim().email().max(255),
-  cpf: z.string().regex(/^\d{11}$/),
-  phone: z.string().regex(/^\d{10,13}$/),
-});
+const orderSchema = z.object({ offerId: z.string().uuid() });
 
 export const createPixOrder = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => orderSchema.parse(d))
@@ -77,10 +71,10 @@ export const createPixOrder = createServerFn({ method: "POST" })
         offer_id: offer.id,
         offer_title: offer.title,
         amount,
-        buyer_name: data.name,
-        buyer_email: data.email,
-        buyer_cpf: data.cpf,
-        buyer_phone: data.phone,
+        buyer_name: "",
+        buyer_email: "",
+        buyer_cpf: "",
+        buyer_phone: "",
       })
       .select("id")
       .single();
@@ -89,7 +83,6 @@ export const createPixOrder = createServerFn({ method: "POST" })
       amount,
       description: offer.title,
       webhookUrl: `${origin}/api/public/syncpay/webhook`,
-      client: { name: data.name, cpf: data.cpf, email: data.email, phone: data.phone },
     });
     await supabaseAdmin
       .from("orders")

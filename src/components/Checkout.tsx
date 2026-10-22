@@ -4,8 +4,6 @@ import { QRCodeSVG } from "qrcode.react";
 import { Check, Copy, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createPixOrder, checkOrder } from "@/lib/public.functions";
 import { brl } from "@/lib/format";
@@ -15,7 +13,6 @@ type Offer = { id: string; title: string; subtitle: string; price: number };
 export function Checkout({ offer, onClose }: { offer: Offer | null; onClose: () => void }) {
   const createFn = useServerFn(createPixOrder);
   const checkFn = useServerFn(checkOrder);
-  const [form, setForm] = useState({ name: "", email: "", cpf: "", phone: "" });
   const [loading, setLoading] = useState(false);
   const [pix, setPix] = useState<{ orderId: string; pixCode: string } | null>(null);
   const [link, setLink] = useState<string | null>(null);
@@ -40,16 +37,11 @@ export function Checkout({ offer, onClose }: { offer: Offer | null; onClose: () 
     return () => clearInterval(t);
   }, [pix, link, checkFn]);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function generate() {
     if (!offer) return;
-    const cpf = form.cpf.replace(/\D/g, "");
-    const phone = form.phone.replace(/\D/g, "");
-    if (cpf.length !== 11) { toast.error("CPF inválido"); return; }
-    if (phone.length < 10) { toast.error("Telefone inválido"); return; }
     setLoading(true);
     try {
-      const r = await createFn({ data: { offerId: offer.id, name: form.name, email: form.email, cpf, phone } });
+      const r = await createFn({ data: { offerId: offer.id } });
       setPix({ orderId: r.orderId, pixCode: r.pixCode });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao gerar PIX");
@@ -102,33 +94,17 @@ export function Checkout({ offer, onClose }: { offer: Offer | null; onClose: () 
             </p>
           </div>
         ) : (
-          <form onSubmit={submit} className="space-y-3">
-            {(
-              [
-                ["name", "Nome completo", "text"],
-                ["email", "E-mail", "email"],
-                ["cpf", "CPF", "text"],
-                ["phone", "Telefone (com DDD)", "tel"],
-              ] as const
-            ).map(([k, label, type]) => (
-              <div key={k} className="space-y-1">
-                <Label htmlFor={k}>{label}</Label>
-                <Input
-                  id={k}
-                  type={type}
-                  required
-                  value={form[k]}
-                  onChange={(e) => setForm({ ...form, [k]: e.target.value })}
-                />
-              </div>
-            ))}
-            <Button type="submit" disabled={loading} className="h-12 w-full bg-gradient-primary text-base font-semibold">
+          <div className="space-y-3">
+            <p className="text-center text-sm text-muted-foreground">
+              Toque em gerar PIX, pague no app do seu banco e o acesso é liberado na hora.
+            </p>
+            <Button onClick={generate} disabled={loading} className="h-12 w-full bg-gradient-primary text-base font-semibold">
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Gerar PIX - {offer && brl(offer.price)}</>}
             </Button>
             <p className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5" /> Pagamento seguro · liberação imediata <Lock className="h-3 w-3" />
             </p>
-          </form>
+          </div>
         )}
       </DialogContent>
     </Dialog>

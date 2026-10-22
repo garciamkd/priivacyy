@@ -345,7 +345,7 @@ function SalesTab() {
         {(q.data ?? []).map((o) => (
           <div key={o.id} className="flex items-center justify-between py-3 text-sm">
             <div>
-              <p className="font-medium">{o.buyer_name}</p>
+              <p className="font-medium">{o.buyer_name || "Cliente PIX"}</p>
               <p className="text-xs text-muted-foreground">{o.offer_title} · {new Date(o.created_at).toLocaleString("pt-BR")}</p>
             </div>
             <div className="text-right">
