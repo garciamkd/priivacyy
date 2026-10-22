@@ -13,8 +13,8 @@ export const Route = createFileRoute("/api/public/syncpay/webhook")({
         } catch {
           return Response.json({ ok: true });
         }
-        const d = (body.data ?? body) as Record<string, unknown>;
-        const id = String(d.identifier ?? d.id ?? d.reference_id ?? "");
+        const d = (body["data"] ?? body) as Record<string, unknown>;
+        const id = String(d["identifier"] ?? d["id"] ?? d["reference_id"] ?? "");
         if (!id) return Response.json({ ok: true });
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data: order } = await supabaseAdmin.from("orders").select("id").eq("syncpay_id", id).maybeSingle();

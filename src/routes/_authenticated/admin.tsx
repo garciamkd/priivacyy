@@ -155,7 +155,7 @@ function ProfileTab() {
   async function save() {
     const { id: _id, updated_at: _u, ...rest } = s!;
     const { error } = await supabase.from("site_settings").update({ ...rest, updated_at: new Date().toISOString() }).eq("id", 1);
-    if (error) return toast.error("Erro ao salvar");
+    if (error) { toast.error("Erro ao salvar"); return; }
     toast.success("Perfil salvo");
     qc.invalidateQueries();
   }
@@ -222,7 +222,7 @@ function OfferRow({ offer, onChange }: { offer: Offer; onChange: () => void }) {
     const { error } = await supabase.from("offers").update({
       title: o.title, subtitle: o.subtitle, price: Number(o.price), position: Number(o.position), active: o.active,
     }).eq("id", o.id);
-    if (error) return toast.error("Erro ao salvar");
+    if (error) { toast.error("Erro ao salvar"); return; }
     toast.success("Oferta salva");
     onChange();
   }
@@ -316,7 +316,7 @@ function AccessTab() {
   useEffect(() => { if (q.data !== undefined) setLink(q.data); }, [q.data]);
   async function save() {
     const { error } = await supabase.from("site_private").update({ access_link: link }).eq("id", 1);
-    if (error) return toast.error("Erro ao salvar");
+    if (error) { toast.error("Erro ao salvar"); return; }
     toast.success("Link salvo");
   }
   return (

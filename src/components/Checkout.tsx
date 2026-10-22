@@ -45,8 +45,8 @@ export function Checkout({ offer, onClose }: { offer: Offer | null; onClose: () 
     if (!offer) return;
     const cpf = form.cpf.replace(/\D/g, "");
     const phone = form.phone.replace(/\D/g, "");
-    if (cpf.length !== 11) return toast.error("CPF inválido");
-    if (phone.length < 10) return toast.error("Telefone inválido");
+    if (cpf.length !== 11) { toast.error("CPF inválido"); return; }
+    if (phone.length < 10) { toast.error("Telefone inválido"); return; }
     setLoading(true);
     try {
       const r = await createFn({ data: { offerId: offer.id, name: form.name, email: form.email, cpf, phone } });

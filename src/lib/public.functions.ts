@@ -23,7 +23,7 @@ function publicClient() {
 
 function toBrowserUrl(url: string) {
   const server = (process.env["SUPABASE_URL"] ?? "").replace(/\/+$/, "");
-  const pub = (import.meta.env.VITE_SUPABASE_URL ?? process.env["VITE_SUPABASE_URL"] ?? "").replace(/\/+$/, "");
+  const pub = (import.meta.env["VITE_SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"] ?? "").replace(/\/+$/, "");
   return server && pub && url.startsWith(server) ? pub + url.slice(server.length) : url;
 }
 
