@@ -26,7 +26,6 @@ export async function createPixCharge(input: {
   amount: number;
   description: string;
   webhookUrl: string;
-  client: { name: string; cpf: string; email: string; phone: string };
 }): Promise<{ pixCode: string; identifier: string }> {
   const token = await getToken();
   const res = await fetch(`${BASE}/api/partner/v1/cash-in`, {
@@ -40,7 +39,6 @@ export async function createPixCharge(input: {
       amount: input.amount,
       description: input.description,
       webhook_url: input.webhookUrl,
-      client: input.client,
     }),
   });
   const text = await res.text();
