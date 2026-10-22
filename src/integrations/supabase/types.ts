@@ -14,16 +14,212 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      gallery: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          position: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          position?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          position?: number
+        }
+        Relationships: []
+      }
+      offers: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          position: number
+          price: number
+          subtitle: string
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          position?: number
+          price: number
+          subtitle?: string
+          title: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          position?: number
+          price?: number
+          subtitle?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          amount: number
+          buyer_cpf: string
+          buyer_email: string
+          buyer_name: string
+          buyer_phone: string
+          created_at: string
+          id: string
+          offer_id: string | null
+          offer_title: string
+          paid_at: string | null
+          pix_code: string | null
+          status: string
+          syncpay_id: string | null
+        }
+        Insert: {
+          amount: number
+          buyer_cpf: string
+          buyer_email: string
+          buyer_name: string
+          buyer_phone: string
+          created_at?: string
+          id?: string
+          offer_id?: string | null
+          offer_title: string
+          paid_at?: string | null
+          pix_code?: string | null
+          status?: string
+          syncpay_id?: string | null
+        }
+        Update: {
+          amount?: number
+          buyer_cpf?: string
+          buyer_email?: string
+          buyer_name?: string
+          buyer_phone?: string
+          created_at?: string
+          id?: string
+          offer_id?: string | null
+          offer_title?: string
+          paid_at?: string | null
+          pix_code?: string | null
+          status?: string
+          syncpay_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_private: {
+        Row: {
+          access_link: string
+          id: number
+        }
+        Insert: {
+          access_link?: string
+          id?: number
+        }
+        Update: {
+          access_link?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          avatar_url: string | null
+          bio: string
+          cover_url: string | null
+          display_name: string
+          handle: string
+          id: number
+          likes_label: string
+          locked_count: number
+          media_count: number
+          posts_count: number
+          promo_original_price: number
+          promo_text: string
+          promo_title: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string
+          cover_url?: string | null
+          display_name?: string
+          handle?: string
+          id?: number
+          likes_label?: string
+          locked_count?: number
+          media_count?: number
+          posts_count?: number
+          promo_original_price?: number
+          promo_text?: string
+          promo_title?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string
+          cover_url?: string | null
+          display_name?: string
+          handle?: string
+          id?: number
+          likes_label?: string
+          locked_count?: number
+          media_count?: number
+          posts_count?: number
+          promo_original_price?: number
+          promo_text?: string
+          promo_title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +346,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
