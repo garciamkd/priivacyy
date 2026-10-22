@@ -62,9 +62,7 @@ function Index() {
             </div>
           </div>
           <div className="px-5 pb-5">
-           <div className="-mt-12 h-24 w-24 overflow-hidden rounded-2xl border-4 border-card bg-muted">
-  {data.avatar && <img src={data.avatar} alt={s.display_name} className="h-full w-full object-contain" />}
-</div>
+          
             <h1 className="mt-2 flex items-center gap-1.5 text-xl font-bold text-foreground">
               {s.display_name} <BadgeCheck className="h-5 w-5 text-primary" />
             </h1>
