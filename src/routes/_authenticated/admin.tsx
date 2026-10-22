@@ -118,9 +118,9 @@ function ImagePicker({ label, path, onChange, round }: { label: string; path: st
     <div className="space-y-2">
       <Label>{label}</Label>
       <div className="flex items-center gap-3">
-        <div className={`overflow-hidden bg-muted ${round ? "h-20 w-20 rounded-full" : "h-20 w-36 rounded-lg"}`}>
-          {url && <img src={url} alt="" className="h-full w-full object-cover" />}
-        </div>
+        <div className={`flex items-center justify-center overflow-hidden bg-muted ${round ? "h-20 w-20 rounded-2xl" : "h-20 w-36 rounded-lg"}`}>
+  {url && <img src={url} alt="" className={`h-full w-full ${round ? "object-contain" : "object-cover"}`} />}
+</div>
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm">
           <Upload className="h-4 w-4" />{busy ? "Enviando..." : "Trocar foto"}
           <input
